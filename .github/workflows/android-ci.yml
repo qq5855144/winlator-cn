@@ -1,8 +1,6 @@
 name: 编译apk（仅编译java）
 
 on:
-  push:
-    branches: ['**']
   workflow_dispatch:
 
 env:
