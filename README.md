@@ -4,6 +4,8 @@
 
 # Winlator-CN
 
+> **本仓库为一加13T（骁龙8至尊版）定制构建**：首次启动自动创建「一加13T推荐」容器（免手动配置）；内置 Box64 0.4.5 / Turnip 26.2 / DXVK 2.4.1 等最新组件；自带中文界面。APK 见 Releases。
+
 Winlator-CN为Winlator的改版，可通过 Wine 和 Box86/Box64 运行 Windows（x86_64）应用程序。
 本仓库用于存放 Winlator 应用源码的最新更新内容。
 如需了解更多信息及下载发行版，请访问：http://52emu.cn/wp/376.html
