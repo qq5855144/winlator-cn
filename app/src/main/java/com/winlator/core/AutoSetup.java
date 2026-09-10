@@ -70,6 +70,7 @@ public abstract class AutoSetup {
                     data.put("startupSelection", (int)Container.STARTUP_SELECTION_ESSENTIAL);
                     data.put("box64Preset", Box64Preset.PERFORMANCE);
                     data.put("box64Version", DefaultVersion.BOX64);
+                    data.put("desktopTheme", WineThemeManager.DEFAULT_DESKTOP_THEME + ",0");
 
                     manager.createContainerAsync(data, (container) -> {
                         if (container != null) {
