@@ -41,6 +41,7 @@ import com.winlator.contentdialog.StorageInfoDialog;
 import com.winlator.container.DXWrappers;
 import com.winlator.container.GraphicsDrivers;
 import com.winlator.core.AppUtils;
+import com.winlator.core.AutoSetup;
 import com.winlator.core.DownloadProgressDialog;
 import com.winlator.core.FileUtils;
 import com.winlator.core.GeneralComponents;
@@ -94,6 +95,7 @@ public class ContainersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         manager = new ContainerManager(getContext());
         loadContainersList();
+        AutoSetup.ensureDefaultContainer(this, manager, this::loadContainersList);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.containers);
     }
 
