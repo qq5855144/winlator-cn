@@ -1,0 +1,60 @@
+name: Build OnePlus13T APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free disk space
+        continue-on-error: true
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc
+          sudo apt-get clean
+          df -h
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install NDK and CMake
+        run: |
+          sdkmanager --install "ndk;24.0.8215888" "cmake;3.22.1"
+      - name: Create debug keystore
+        run: |
+          keytool -genkey -v -keystore debug.keystore -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 -storepass android -keypass android -dname "CN=Debug,OU=Debug,O=Debug,L=Debug,ST=Debug,C=US"
+      - name: Build release APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon -Pandroid.injected.signing.store.file=$PWD/debug.keystore -Pandroid.injected.signing.store.password=android -Pandroid.injected.signing.key.alias=androiddebugkey -Pandroid.injected.signing.key.password=android
+      - name: Rename APK
+        run: |
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          mv app/build/outputs/apk/release/app-release.apk "Winlator13T-OnePlus-${TIMESTAMP}.apk"
+          ls -lh *.apk
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: winlator13t-apk
+          path: "*.apk"
+          retention-days: 30
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: op13t-build-${{ github.run_number }}
+          name: "Winlator13T一加13T定制版 (build ${{ github.run_number }})"
+          body: |
+            为一加13T（骁龙8至尊版）定制的 WinlatorCN 完整版。
+            - 内置全部组件（Box64 0.4.5 / Turnip 26.2 / DXVK 2.4.1 等）
+            - 首次启动自动创建「一加13T推荐」容器（1280x720 / Turnip 驱动 / box64 性能预设）
+            - 中文界面，开箱即用
+          files: "*.apk"
